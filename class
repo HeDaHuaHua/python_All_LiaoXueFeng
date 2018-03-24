@@ -1,0 +1,235 @@
+# class 类 和 实例
+
+'''
+
+class Student(object):
+    def __init__(self, name, score):
+        self.name = name
+        self.score = score
+
+    def print_score(self):  # 类的方法
+        print('%s:%s' % (self.name, self.score))
+
+# 封装的好处就是可以给类增加新的方法
+    def get_grade(self):
+        if self.score > 90:
+            return 'A'
+        elif self.score > 60:
+            return 'B'
+        else:
+            return 'C'
+
+
+bart = Student('BartSimpson', 59)
+lisa = Student('lisa', 89)
+
+print(bart)
+print(Student)
+# bart.name = 'BartSimpsom'
+print(bart.name)
+print(bart.score)
+
+bart.print_score()
+print(lisa.name, lisa.get_grade())
+
+# 数据封装
+#def print_score(std):
+#    print('%s:%s' % (std.name, std.score))
+
+
+#print_score(bart)
+
+'''
+
+
+# 访问限制
+'''
+
+class Student(object):
+    def __init__(self, name, score):
+        self.__name = name
+        self.__score = score
+
+    def get_name(self):
+        return self.__name
+
+    def get_score(self):
+        return self.__score
+
+    def set_score(self, score):
+        if 0 <= score <= 100:
+            self.__score = score
+        else:
+            raise ValueError('bad score')
+
+    def print_score(self):
+        print('%s : %s' %(self.__name, self.__score))
+
+
+bart = Student('Bart Simpson', 66)
+# print(bart.__name) # 这种就是错误的写法 因为__这个代表私有 通过访问限制，代码更为健壮
+
+print(bart.get_name())
+print(bart.get_score())
+
+bart.set_score(99)
+print(bart.get_score())
+
+print(bart._Student__name)  # 这种方式是可以直接访问的，但是不要这样使用
+
+bart.__name = 'New Name'
+print(bart.__name)
+print(bart.get_name())
+'''
+
+
+# 继承和多态
+
+class Animal(object):
+    def run(self):
+        print('Animal is running')
+
+
+class Dog(Animal):
+    def run(self):
+        print('dog is running')
+
+    def eat(self):
+        print('dog is eating')
+
+
+class Cat(Animal):
+    def run(self):
+        print('cat is running')
+
+
+a = list()
+b = Dog()
+c = Animal()
+
+print(isinstance(a, list)) # 判断一个变量是否是某个类型
+print(isinstance(b, Dog))
+print(isinstance(b, Animal))
+print(isinstance(c, Animal))
+
+dog = Dog()
+dog.run()
+
+cat = Cat()
+cat.run()
+
+print('hello')
+
+
+def run_twice(animal):  # 多态
+    animal.run()
+    animal.run()
+
+
+run_twice(Animal())
+print('ok')
+run_twice(Dog())
+
+
+class Timer(object):
+    def run(self):
+        print('start...')
+
+Timer().run()
+
+
+'''
+class Student(object):
+    def __init__(self, name='Zhao', score='3.43'):
+        self.name = name
+        self.score = score
+
+
+    def printinformation(self):
+        print('%s got %s' % (self.name, self.score))
+
+
+class SSE(Student):
+    def __init__(self, major='CS'):
+        Student.__init__(self)
+        self.major = major
+
+    def printinformation(self):
+        print('%s is studying in %s and got %s' % (self.name, self.major,
+                                               self.score))
+
+
+M = SSE()
+W = Student()
+M.printinformation()
+W.printinformation()
+
+
+# 获取对象信息
+# 判断对象类型 使用type
+print(type(123))
+print(type('str'))
+print(type(None))
+print(type(abs))
+print(type(M))
+'''
+
+import types
+
+
+def fn():
+    pass
+
+
+print(type(fn))
+print(type(lambda x :x))
+print(type(lambda x :x) == types.LambdaType)
+
+
+print(dir('abs'))
+print(len('ABC'))
+print('ABC'.__len__())
+
+print('hello world')
+
+
+# 实例属性和类属性
+# 给实例绑定属性的方法是通过实例变量或者通过self变量
+class Student(object):
+
+#   name = 'Student'    # 类属性
+    count = 0
+
+    def __init__(self, name):
+        self.name = name
+        Student.count += 1
+
+
+if Student.count != 0:
+    print('ceshi failed')
+else:
+    bart = Student('Bart')
+    if Student.count != 1:
+        print('failed')
+    else:
+        lisa = Student('Bart')
+        if Student.count != 2:
+            print('failed')
+        else:
+            print('Students:',Student.count)
+            print('success')
+
+# s = Student('bob')
+# s.score = 90
+
+# s = Student()      # 创建实例s
+# print(s.name)      # 因为实例并没有name属性，所以会查找class的name属性
+# print(Student.name)    # 打印类的name属性
+
+# s.name = 'michal'
+# print(s.name)
+
+# print(Student.name)
+
+# del s.name
+# print(s.name)
