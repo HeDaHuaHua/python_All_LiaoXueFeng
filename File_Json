@@ -1,0 +1,100 @@
+#  file文件操作
+'''
+import os
+print(os.name)  #  nt 表示为Windows
+
+print(os.path.abspath('.'))  # 当前目录
+
+print('you are the best')
+for x in os.listdir('.'):
+    print(x)
+
+
+print('hello world')
+print([x for x in os.listdir('.') if os.path.isfile(x) and os.path.splitext(x)[1]=='.py'])
+
+print('well done')
+print([x for x in os.listdir('.') if os.path.isdir(x)])
+print([x for x in os.listdir('.') if os.path.isdir(x)])  # 这个是打印的文件夹
+
+
+print('you are beautiful')
+def showFileInPath(path='.',str=''):
+    col = [x for x in os.listdir(path)]
+    for item in col:
+        if os.path.isdir(item):     # 这里应该是判断是否是文件夹的，如果是文件夹，再来进行迭代处理
+            showFileInPath(item, str)
+        else:
+            if str in item:
+                print(os.path.abspath(path), '->', item)
+
+
+showFileInPath(str='test')
+'''
+
+
+#  序列化 pickling unpickling
+import pickle
+'''
+d = dict(name='bob', age=20, score=88)
+print(pickle.dumps(d))
+
+f = open('dump.txt', 'wb')
+pickle.dump(d, f)
+f.close()
+
+
+f = open('dump.txt', 'rb')
+d = pickle.load(f)
+f.close()
+print(d)
+'''
+
+
+import json
+d = dict(name='bob', age=20, score=88)
+print(d)
+print(json.dumps(d))  # dumps方法返回一个str，内容就是标准的JSON
+# dump方法可以直接把JSON写入一个file-like Object
+# 要把JSON反序列为python对象，用load() 或者load()方法
+# 前者把JSON字符串反序列化，后者从file-like object中读取字符串并反序列化
+
+print('I am the best')
+json_str = '{"age":30,"score":66,"name":"jason"}'
+print(json.loads(json_str))
+
+print('well well well well well')
+#  JSON进阶
+class Student(object):
+    def __init__(self, name, age, score):
+        self.name = name
+        self.age = age
+        self.score = score
+
+
+def student2dict(std):  # 把类实例转为Json格式
+    return{
+        'name': std.name,
+        'age': std.age,
+        'score': std.score
+    }
+
+
+s = Student('Bob', 30, 88)
+# print(json.dumps(s))  # 这样直接写是错误的
+print(json.dumps(s, default=student2dict))  # 这样就OK了
+# 这样的话，如果下次再遇到一个Teacher类的实例，照样无法序列化JSON，so..
+# print(json.dumps(s, default=lambda obj:obj.__dict__))
+
+
+def dict2student(d):  # 反序列化实例  将json变成类的实例
+    return Student(d['name'], d['age'], d['score'])
+
+
+json_str = '{"age":40, "score":99,"name":"bob"}'
+print(json.loads(json_str, object_hook=dict2student))
+# 这样打印出的就是反序列化的Student实例
+
+
+obj = dict(name='小明', age=20)
+s = json.dumps(obj, ensure_ascii=True)
